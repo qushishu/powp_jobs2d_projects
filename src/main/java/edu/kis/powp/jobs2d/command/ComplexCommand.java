@@ -3,10 +3,10 @@ package edu.kis.powp.jobs2d.command;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.visitor.ICommandVisitor;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ComplexCommand implements ICompoundCommand {
+
     private final List<DriverCommand> commandList;
 
     public ComplexCommand(List<DriverCommand> commandList) {
@@ -20,6 +20,13 @@ public class ComplexCommand implements ICompoundCommand {
         }
     }
 
+    public ComplexCommand copy() {
+        List<DriverCommand> commandListClone = new ArrayList<>();
+        for (DriverCommand driverCommand : commandList) {
+            commandListClone.add(driverCommand.copy());
+        }
+        return new ComplexCommand(commandListClone);
+    }
 
     @Override
     public Iterator<DriverCommand> iterator() {

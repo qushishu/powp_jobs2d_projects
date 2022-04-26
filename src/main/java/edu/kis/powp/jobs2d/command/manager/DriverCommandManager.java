@@ -48,6 +48,11 @@ public class DriverCommandManager {
 				visitor.visit(this);
 			}
 
+			@Override
+			public DriverCommand copy() {
+				return null;
+			}
+
 
 			@Override
 			public Iterator<DriverCommand> iterator() {
