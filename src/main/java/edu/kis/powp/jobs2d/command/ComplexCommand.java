@@ -9,8 +9,15 @@ public class ComplexCommand implements ICompoundCommand {
 
     private final List<DriverCommand> commandList;
 
+    String name=null;
+
     public ComplexCommand(List<DriverCommand> commandList) {
         this.commandList = commandList;
+    }
+
+    public ComplexCommand(List<DriverCommand> commandList,String name) {
+        this.commandList = commandList;
+        this.name = name;
     }
 
     @Override
@@ -36,5 +43,10 @@ public class ComplexCommand implements ICompoundCommand {
     @Override
     public void accept(ICommandVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
