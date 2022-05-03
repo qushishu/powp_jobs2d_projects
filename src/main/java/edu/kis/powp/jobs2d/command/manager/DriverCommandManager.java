@@ -13,7 +13,7 @@ import edu.kis.powp.observer.Publisher;
  * Driver command Manager.
  */
 public class DriverCommandManager {
-	private DriverCommand currentCommand = null; // TODO here should be stored command loaded from file
+	private DriverCommand currentCommand = null;
 
 	private Publisher changePublisher = new Publisher();
 
