@@ -116,7 +116,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 			}
 
 			ICommandLoader loader = new CommandLoaderFactory().getLoader(fileExtension);
-			List<DriverCommand> complexCommands = loader.loadCommandsFromFile(data);
+			List<DriverCommand> complexCommands = loader.loadCommands(data);
 
 			commandManager.setCurrentCommand(complexCommands, selectedFile.getName());
 		}
