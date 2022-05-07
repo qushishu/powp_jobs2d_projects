@@ -1,0 +1,30 @@
+[
+  {
+    "commandList": [
+      {
+        "type": "SET_POSITION",
+        "posX": 0,
+        "posY": 0
+      },
+      {
+        "type": "OPERATE_TO",
+        "posX": 50,
+        "posY": 50
+      }
+    ]
+  },
+  {
+    "commandList": [
+      {
+        "type": "SET_POSITION",
+        "posX": -50,
+        "posY": 0
+      },
+      {
+        "type": "OPERATE_TO",
+        "posX": 10,
+        "posY": 0
+      }
+    ]
+  }
+]

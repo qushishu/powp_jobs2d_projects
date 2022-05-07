@@ -6,6 +6,10 @@ import java.util.List;
 public class ComplexCommandBuilder {
     private final List<DriverCommand> commandList = new ArrayList<>();
 
+    public static ComplexCommandBuilder builder() {
+        return new ComplexCommandBuilder();
+    }
+
     public ComplexCommandBuilder addCommand(final DriverCommand command) {
         commandList.add(command);
         return this;
@@ -20,7 +24,6 @@ public class ComplexCommandBuilder {
     }
 
     public ComplexCommand build() {
-        commandList.clear();
         return new ComplexCommand(commandList);
     }
 }
