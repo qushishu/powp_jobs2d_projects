@@ -36,6 +36,7 @@ public class DriverCommandManager {
 	 */
 	public synchronized void setCurrentCommand(List<DriverCommand> commandList, String name) {
 		setCurrentCommand(new ComplexCommand(commandList,name));
+
 	}
 
 	/**

@@ -9,11 +9,7 @@ public class ComplexCommand implements ICompoundCommand {
 
     private final List<DriverCommand> commandList;
 
-    String name=null;
-
-    public ComplexCommand(List<DriverCommand> commandList) {
-        this.commandList = commandList;
-    }
+    private String name;
 
     public ComplexCommand(List<DriverCommand> commandList,String name) {
         this.commandList = commandList;
@@ -32,7 +28,7 @@ public class ComplexCommand implements ICompoundCommand {
         for (DriverCommand driverCommand : commandList) {
             commandListClone.add(driverCommand.copy());
         }
-        return new ComplexCommand(commandListClone);
+        return new ComplexCommand(commandListClone,name);
     }
 
     @Override
