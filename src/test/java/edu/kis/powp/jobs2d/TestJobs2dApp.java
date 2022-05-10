@@ -2,6 +2,8 @@ package edu.kis.powp.jobs2d;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,11 +12,9 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
+import edu.kis.powp.jobs2d.command.transformers.*;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
-import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
-import edu.kis.powp.jobs2d.events.SelectTestFigure2OptionListener;
-import edu.kis.powp.jobs2d.events.SelectTestFigureOptionListener;
+import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
@@ -24,14 +24,14 @@ public class TestJobs2dApp {
 
 	/**
 	 * Setup test concerning preset figures in context.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupPresetTests(Application application) {
 		SelectTestFigureOptionListener selectTestFigureOptionListener = new SelectTestFigureOptionListener(
-				DriverFeature.getDriverManager());
+			DriverFeature.getDriverManager());
 		SelectTestFigure2OptionListener selectTestFigure2OptionListener = new SelectTestFigure2OptionListener(
-				DriverFeature.getDriverManager());
+			DriverFeature.getDriverManager());
 
 		application.addTest("Figure Joe 1", selectTestFigureOptionListener);
 		application.addTest("Figure Joe 2", selectTestFigure2OptionListener);
@@ -39,7 +39,7 @@ public class TestJobs2dApp {
 
 	/**
 	 * Setup test using driver commands in context.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupCommandTests(Application application) {
@@ -47,11 +47,21 @@ public class TestJobs2dApp {
 
 		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
+		List<TransformerCommand> transformerCommands = new ArrayList<>();
+		transformerCommands.add(new TranslateCommand(50, 50));
+		transformerCommands.add(new ScaleCommand(0.5, 0.5));
+		transformerCommands.add(new RotateCommand(180));
+		ComplexTransformerCommand complexTransformerCommand =
+			new ComplexTransformerCommand(transformerCommands);
+		application.addTest("Transform command",
+			new SelectTransformCommandOptionListener(
+				DriverFeature.getDriverManager(), complexTransformerCommand, "Transform"));
+		DriverFeature.updateDriverInfo();
 	}
 
 	/**
 	 * Setup driver manager, and set default Job2dDriver for application.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
@@ -65,6 +75,14 @@ public class TestJobs2dApp {
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
+
+		//driver = new TransformerDriver(driver, "transform");
+//		List<TransformerCommand> transformerCommands = new ArrayList<>();
+//		transformerCommands.add(new TranslateCommand(50, 50));
+//		transformerCommands.add(new TranslateCommand(0, 10));
+//		driver = DriverFeature.getDriverManager().transformCurrentDriver(transformerCommands, "transform");
+//		DriverFeature.addDriver("Transform Special line Simulator", driver);
+
 		DriverFeature.updateDriverInfo();
 	}
 
@@ -74,26 +92,26 @@ public class TestJobs2dApp {
 		application.addWindowComponent("Command Manager", commandManager);
 
 		CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(
-				commandManager);
+			commandManager);
 		CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
 	}
 
 	/**
 	 * Setup menu for adjusting logging settings.
-	 * 
+	 *
 	 * @param application Application context.
 	 */
 	private static void setupLogger(Application application) {
 
 		application.addComponentMenu(Logger.class, "Logger", 0);
 		application.addComponentMenuElement(Logger.class, "Clear log",
-				(ActionEvent e) -> application.flushLoggerOutput());
+			(ActionEvent e) -> application.flushLoggerOutput());
 		application.addComponentMenuElement(Logger.class, "Fine level", (ActionEvent e) -> logger.setLevel(Level.FINE));
 		application.addComponentMenuElement(Logger.class, "Info level", (ActionEvent e) -> logger.setLevel(Level.INFO));
 		application.addComponentMenuElement(Logger.class, "Warning level",
-				(ActionEvent e) -> logger.setLevel(Level.WARNING));
+			(ActionEvent e) -> logger.setLevel(Level.WARNING));
 		application.addComponentMenuElement(Logger.class, "Severe level",
-				(ActionEvent e) -> logger.setLevel(Level.SEVERE));
+			(ActionEvent e) -> logger.setLevel(Level.SEVERE));
 		application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
 	}
 
