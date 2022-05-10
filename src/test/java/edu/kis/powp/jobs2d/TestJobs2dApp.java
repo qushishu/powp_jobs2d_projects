@@ -47,13 +47,39 @@ public class TestJobs2dApp {
 
 		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
-		List<TransformerCommand> transformerCommands = new ArrayList<>();
-		transformerCommands.add(new TranslateCommand(50, 50));
-		transformerCommands.add(new ScaleCommand(0.5, 0.5));
-		transformerCommands.add(new RotateCommand(180));
+		// Selecting another driver resets previous transformer commands for this driver.
+		// Translate
+		List<TransformerCommand> translateCommands = new ArrayList<>();
+		translateCommands.add(new TranslateCommand(10, 10));
+		ComplexTransformerCommand translateComplexCommand = new ComplexTransformerCommand(translateCommands);
+		application.addTest("Translate",
+			new SelectTransformCommandOptionListener(
+				DriverFeature.getDriverManager(), translateComplexCommand, "Translate"));
+
+		// Scale
+		List<TransformerCommand> scaleCommands = new ArrayList<>();
+		scaleCommands.add(new ScaleCommand(1.1, 0.9));
+		ComplexTransformerCommand scaleComplexCommand = new ComplexTransformerCommand(scaleCommands);
+		application.addTest("Scale",
+			new SelectTransformCommandOptionListener(
+				DriverFeature.getDriverManager(), scaleComplexCommand, "Scale"));
+
+		// Rotate
+		List<TransformerCommand> rotateCommands = new ArrayList<>();
+		rotateCommands.add(new RotateCommand(10));
+		ComplexTransformerCommand rotateComplexCommand = new ComplexTransformerCommand(rotateCommands);
+		application.addTest("Rotate",
+			new SelectTransformCommandOptionListener(
+				DriverFeature.getDriverManager(), rotateComplexCommand, "Rotate"));
+
+		// All in one
+		List<TransformerCommand> complexTransformerCommands = new ArrayList<>();
+		complexTransformerCommands.add(new TranslateCommand(50, 50));
+		complexTransformerCommands.add(new ScaleCommand(0.5, 0.5));
+		complexTransformerCommands.add(new RotateCommand(180));
 		ComplexTransformerCommand complexTransformerCommand =
-			new ComplexTransformerCommand(transformerCommands);
-		application.addTest("Transform command",
+			new ComplexTransformerCommand(complexTransformerCommands);
+		application.addTest("Complex transform",
 			new SelectTransformCommandOptionListener(
 				DriverFeature.getDriverManager(), complexTransformerCommand, "Transform"));
 		DriverFeature.updateDriverInfo();
@@ -75,13 +101,6 @@ public class TestJobs2dApp {
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
-
-		//driver = new TransformerDriver(driver, "transform");
-//		List<TransformerCommand> transformerCommands = new ArrayList<>();
-//		transformerCommands.add(new TranslateCommand(50, 50));
-//		transformerCommands.add(new TranslateCommand(0, 10));
-//		driver = DriverFeature.getDriverManager().transformCurrentDriver(transformerCommands, "transform");
-//		DriverFeature.addDriver("Transform Special line Simulator", driver);
 
 		DriverFeature.updateDriverInfo();
 	}

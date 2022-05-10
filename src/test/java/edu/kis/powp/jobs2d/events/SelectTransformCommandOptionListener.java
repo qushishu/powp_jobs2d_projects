@@ -1,12 +1,10 @@
 package edu.kis.powp.jobs2d.events;
 
 import edu.kis.powp.jobs2d.command.transformers.ComplexTransformerCommand;
-import edu.kis.powp.jobs2d.command.transformers.TransformerCommand;
 import edu.kis.powp.jobs2d.drivers.DriverManager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class SelectTransformCommandOptionListener implements ActionListener {
 
