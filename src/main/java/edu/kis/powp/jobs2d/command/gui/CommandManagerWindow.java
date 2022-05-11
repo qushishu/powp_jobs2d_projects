@@ -1,18 +1,20 @@
 package edu.kis.powp.jobs2d.command.gui;
 
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
-
 import edu.kis.powp.appbase.gui.WindowComponent;
+import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.io.CommandLoaderFactory;
+import edu.kis.powp.jobs2d.command.io.ICommandLoader;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
 import edu.kis.powp.observer.Subscriber;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Scanner;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
 
@@ -24,7 +26,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	private JTextArea observerListField;
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 9204679248304669948L;
 
@@ -56,6 +58,14 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		content.add(currentCommandField, c);
 		updateCurrentCommandField();
 
+		JButton btnLoadCommands = new JButton("Load commands");
+		btnLoadCommands.addActionListener((ActionEvent e) -> this.loadCommands());
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.gridx = 0;
+		c.weighty = 1;
+		content.add(btnLoadCommands, c);
+
 		JButton btnClearCommand = new JButton("Clear command");
 		btnClearCommand.addActionListener((ActionEvent e) -> this.clearCommand());
 		c.fill = GridBagConstraints.BOTH;
@@ -86,6 +96,36 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		commandManager.getChangePublisher().clearObservers();
 		this.updateObserverListField();
 	}
+
+	public void loadCommands() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.json", "json"));
+
+		int fileChooserState = fileChooser.showOpenDialog(this);
+
+		if (fileChooserState == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			String fileExtension = getFileExtension(selectedFile.getName());
+			String data = null;
+
+			try {
+				data = new Scanner(selectedFile).useDelimiter("\\Z").next();
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+
+			ICommandLoader loader = new CommandLoaderFactory().getLoader(fileExtension);
+			List<DriverCommand> complexCommands = loader.loadCommands(data);
+
+			commandManager.setCurrentCommand(complexCommands, selectedFile.getName());
+		}
+	}
+
+	private String getFileExtension(String selectedFile) {
+		return selectedFile.substring(selectedFile.lastIndexOf(".") + 1);
+	}
+
 
 	private void updateObserverListField() {
 		observerListString = "";

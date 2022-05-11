@@ -44,6 +44,11 @@
 	        <scope>system</scope>
 	        <systemPath>${project.basedir}/lib/PowpAppBase.jar</systemPath>
 	    </dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.9.0</version>
+		</dependency>
 	</dependencies>
 	
 </project>
