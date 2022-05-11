@@ -17,7 +17,7 @@ public class ComplexCommand implements ICompoundCommand {
 		this.name = DEFAULT_NAME;
 	}
 	public ComplexCommand(List<DriverCommand> commandList, String name) {
-		this.commandList = commandList;
+		this.commandList = copyFromList(commandList);
 		this.name = name;
 	}
 
@@ -29,11 +29,14 @@ public class ComplexCommand implements ICompoundCommand {
 	}
 
 	public ComplexCommand copy() {
+		return new ComplexCommand(this.copyFromList(this.commandList), this.name);
+	}
+	private List<DriverCommand> copyFromList(List<DriverCommand> copyTarget) {
 		List<DriverCommand> commandListClone = new ArrayList<>();
-		for (DriverCommand driverCommand : commandList) {
+		for (DriverCommand driverCommand : copyTarget) {
 			commandListClone.add(driverCommand.copy());
 		}
-		return new ComplexCommand(commandListClone, name);
+		return commandListClone;
 	}
 
 	@Override

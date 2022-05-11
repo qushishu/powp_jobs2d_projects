@@ -30,7 +30,8 @@ public class ComplexCommandBuilder {
     }
 
     public ComplexCommand build() {
-        //TODO: clear result if command build will be added
-        return new ComplexCommand(new ArrayList<>(commandList), name);
+        ComplexCommand result = new ComplexCommand(new ArrayList<>(commandList), name);
+        this.commandList.clear();
+        return result;
     }
 }
