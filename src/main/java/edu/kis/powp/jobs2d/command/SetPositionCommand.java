@@ -25,4 +25,9 @@ public class SetPositionCommand implements DriverCommand {
 	public void accept(ICommandVisitor visitor) {
 		visitor.visit(this);
 	}
+
+	@Override
+	public DriverCommand copy() {
+		return new SetPositionCommand(posX,posY);
+	}
 }
