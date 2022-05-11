@@ -2,8 +2,6 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
-import edu.kis.powp.jobs2d.command.transformers.ComplexTransformerCommand;
-import edu.kis.powp.jobs2d.drivers.adapter.TransformerDriver;
 
 /**
  * Driver manager provides means to setup the driver. It also enables other
@@ -24,11 +22,6 @@ public class DriverManager {
 	 * @return Current driver.
 	 */
 	public synchronized Job2dDriver getCurrentDriver() {
-		return currentDriver;
-	}
-
-	public Job2dDriver transformCurrentDriver(ComplexTransformerCommand transformerCommands, String name) {
-		currentDriver = new TransformerDriver(currentDriver, transformerCommands, name);
 		return currentDriver;
 	}
 }
