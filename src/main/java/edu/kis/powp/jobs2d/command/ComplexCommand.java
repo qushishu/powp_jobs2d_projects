@@ -7,10 +7,15 @@ import java.util.*;
 
 public class ComplexCommand implements ICompoundCommand {
 
+	public static final String DEFAULT_NAME = "DEFAULT COMMAND NAME";
 	private final List<DriverCommand> commandList;
 
-	private String name;
+	private final String name;
 
+	public ComplexCommand(List<DriverCommand> commandList) {
+		this.commandList = commandList;
+		this.name = DEFAULT_NAME;
+	}
 	public ComplexCommand(List<DriverCommand> commandList, String name) {
 		this.commandList = commandList;
 		this.name = name;
