@@ -10,10 +10,16 @@ import java.util.logging.Logger;
 import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
+import edu.kis.powp.jobs2d.command.ComplexCommandFactory;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.command.transformers.*;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
+
+import edu.kis.powp.jobs2d.events.DrawLineMouseListener;
+import edu.kis.powp.jobs2d.drivers.composite.DriverComposite;
+import edu.kis.powp.jobs2d.drivers.gui.DriverUpdateInfoPrinterObserver;
+
 import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
@@ -44,7 +50,8 @@ public class TestJobs2dApp {
 	 */
 	private static void setupCommandTests(Application application) {
 		application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
-
+		application.addTest("Test complex command builder", new SelectLoadComplexCommandListener(
+				ComplexCommandFactory.getSquareCommand()));
 		application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
 		// Selecting another driver resets previous transformer commands for this driver.
@@ -101,12 +108,21 @@ public class TestJobs2dApp {
 	 * @param application Application context.
 	 */
 	private static void setupDrivers(Application application) {
+		DriverUpdateInfoPrinterObserver driverObserver = new DriverUpdateInfoPrinterObserver();
+		DriverFeature.getDriverManager().getChangePublisher().addSubscriber(driverObserver);
+
 		Job2dDriver loggerDriver = new LoggerDriver();
 		DriverFeature.addDriver("Logger driver", loggerDriver);
 
 		DrawPanelController drawerController = DrawerFeature.getDrawerController();
 		Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 		DriverFeature.addDriver("Line Simulator", driver);
+
+		DriverComposite driverComposite = new DriverComposite();
+		driverComposite.add(loggerDriver);
+		driverComposite.add(driver);
+		DriverFeature.addDriver("Composite Simulator", driverComposite);
+
 		DriverFeature.getDriverManager().setCurrentDriver(driver);
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
@@ -144,6 +160,10 @@ public class TestJobs2dApp {
 		application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
 	}
 
+	private static void setMouseDrawer(Application application) {
+		DrawLineMouseListener.enable(application.getFreePanel(), DriverFeature.getDriverManager());
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -153,8 +173,9 @@ public class TestJobs2dApp {
 				Application app = new Application("Jobs 2D");
 				DrawerFeature.setupDrawerPlugin(app);
 				CommandsFeature.setupCommandManager();
-
+				
 				DriverFeature.setupDriverPlugin(app);
+				setMouseDrawer(app);
 				setupDrivers(app);
 				setupPresetTests(app);
 				setupCommandTests(app);
