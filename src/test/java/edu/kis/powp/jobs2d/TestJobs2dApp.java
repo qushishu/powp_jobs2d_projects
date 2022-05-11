@@ -65,7 +65,7 @@ public class TestJobs2dApp {
 			new ComplexTransformerCommand(complexTransformerCommands);
 		application.addTest("Complex transform",
 			new SelectTransformCommandOptionListener(
-				DriverFeature.getDriverManager(), complexTransformerCommand, "Transform"));
+				DriverFeature.getDriverManager(), complexTransformerCommand, "Complex"));
 	}
 
 	private static void addRotateTest(Application application) {

@@ -3,7 +3,6 @@ package edu.kis.powp.jobs2d.drivers.adapter;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.transformers.ComplexTransformerCommand;
 import edu.kis.powp.jobs2d.command.transformers.TransformedCoords;
-import edu.kis.powp.jobs2d.command.transformers.TransformerCommand;
 
 public class TransformerDriver implements Job2dDriver {
 	private Job2dDriver job2dDriver;
@@ -30,6 +29,8 @@ public class TransformerDriver implements Job2dDriver {
 
 	@Override
 	public String toString() {
-		return "2d device simulator - " + name;
+		String test = transformerCommands.toString();
+		System.out.println(test);
+		return "Transformation - " + name;
 	}
 }
