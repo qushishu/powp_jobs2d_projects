@@ -9,7 +9,6 @@ import edu.kis.powp.jobs2d.command.io.CommandLoaderFactory;
 import edu.kis.powp.jobs2d.command.io.ICommandLoader;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.observer.Subscriber;
 
 import javax.swing.*;
@@ -104,7 +103,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 	public void updateCurrentCommandPreviewPanel() {
 		DriverCommand currentCommand = commandManager.getCurrentCommand();
 		previewPanelDrawerController.clearPanel();
-		if (currentCommand != null){
+		if (currentCommand != null) {
 			currentCommand.execute(driver);
 		}
 	}
