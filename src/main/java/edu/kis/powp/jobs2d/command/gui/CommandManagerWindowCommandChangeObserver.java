@@ -1,5 +1,6 @@
 package edu.kis.powp.jobs2d.command.gui;
 
+import edu.kis.powp.jobs2d.command.LoadedCommandPreview;
 import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindowCommandChangeObserver implements Subscriber {
@@ -18,7 +19,9 @@ public class CommandManagerWindowCommandChangeObserver implements Subscriber {
 	@Override
 	public void update() {
 		commandManagerWindow.updateCurrentCommandField();
-		commandManagerWindow.updateCurrentCommandPreviewPanel();
+		LoadedCommandPreview loadedCommandPreview = new LoadedCommandPreview(commandManagerWindow.getCurrentCommandPreviewPanel(), commandManagerWindow.getCommandManager());
+		loadedCommandPreview.updateCurrentCommandPreviewPanel();
+//		commandManagerWindow.updateCurrentCommandPreviewPanel();
 	}
 
 }
